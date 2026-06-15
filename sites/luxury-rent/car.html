@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Автомобили | Luxury Rent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e94560;
+            border-radius: 10px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 30px;
+            background: rgba(10, 10, 10, 0.96);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(233, 69, 96, 0.2);
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #e94560);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+        .nav {
+            display: flex;
+            gap: 24px;
+        }
+        .nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .nav a:hover {
+            color: #e94560;
+        }
+        .back-button {
+            background: rgba(233, 69, 96, 0.2);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #e94560;
+            transition: 0.3s;
+        }
+        .back-button:hover {
+            background: #e94560;
+            color: white;
+        }
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #e94560;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .nav { display: none; }
+            .mobile-menu-btn { display: block; }
+            .header { padding: 12px 20px; }
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 70%;
+            max-width: 280px;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 1001;
+            padding: 60px 24px 30px;
+            transition: right 0.3s;
+            border-left: 1px solid rgba(233, 69, 96, 0.3);
+        }
+        .mobile-menu.active { right: 0; }
+        .mobile-menu-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #e94560;
+            font-size: 28px;
+            cursor: pointer;
+        }
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .mobile-menu-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(233, 69, 96, 0.2);
+        }
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+        }
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 120px 20px 60px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+        .hero h1 span {
+            color: #e94560;
+        }
+        .hero p {
+            font-size: 18px;
+            color: #a0a0b0;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 16px; }
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 10px 25px;
+            border-radius: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            text-decoration: none;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: #e94560;
+            color: #fff;
+        }
+
+        /* Search Box */
+        .search-box {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        .search-box input {
+            padding: 12px 20px;
+            width: 300px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            outline: none;
+        }
+        .search-box input:focus {
+            border-color: #e94560;
+        }
+
+        /* Cars Grid */
+        .cars-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        .car-card {
+            background: linear-gradient(135deg, rgba(22, 33, 62, 0.7), rgba(22, 33, 62, 0.4));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(233, 69, 96, 0.15);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+        .car-card:hover {
+            transform: translateY(-8px);
+            border-color: #e94560;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.4);
+        }
+        .car-image {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+        }
+        .car-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .car-card:hover .car-image img {
+            transform: scale(1.05);
+        }
+        .car-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            backdrop-filter: blur(8px);
+        }
+        .status-available {
+            background: rgba(40, 167, 69, 0.9);
+            color: #fff;
+        }
+        .status-rented {
+            background: rgba(233, 69, 96, 0.9);
+            color: #fff;
+        }
+        .car-header {
+            padding: 20px 20px 0;
+        }
+        .car-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .car-subtitle {
+            font-size: 13px;
+            color: #a0a0b0;
+            display: flex;
+            gap: 12px;
+        }
+        .car-body {
+            padding: 20px;
+        }
+        .car-price {
+            background: rgba(233, 69, 96, 0.12);
+            border-radius: 16px;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .price-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: #e94560;
+        }
+        .price-label {
+            font-size: 12px;
+            color: #a0a0b0;
+        }
+        .car-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .btn-rent {
+            flex: 1;
+            background: rgba(233, 69, 96, 0.15);
+            color: #e94560;
+            border: 1px solid rgba(233, 69, 96, 0.3);
+            padding: 10px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            text-align: center;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .btn-rent:hover {
+            background: #e94560;
+            color: #fff;
+        }
+        .btn-fav {
+            background: rgba(255, 255, 255, 0.05);
+            color: #ff6b8a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-fav:hover {
+            background: #e94560;
+            color: #fff;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: rgba(22, 33, 62, 0.4);
+            border-radius: 32px;
+        }
+        .footer {
+            background: #111;
+            padding: 40px 20px 25px;
+            margin-top: 60px;
+            text-align: center;
+        }
+        .footer p {
+            color: #a0a0b0;
+            font-size: 13px;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(233, 69, 96, 0.95);
+            padding: 12px 20px;
+            border-radius: 50px;
+            color: white;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1100;
+            transform: translateX(400px);
+            transition: transform 0.4s;
+        }
+        .toast.show {
+            transform: translateX(0);
+        }
+        @media (max-width: 768px) {
+            .cars-grid { grid-template-columns: 1fr; }
+            .search-box input { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo" onclick="window.location.href='index.html'">LUXURY RENT</div>
+        <div class="nav">
+            <a href="index.html">Главная</a>
+            <a href="car.html" class="active">Автомобили</a>
+            <a href="rent.html">Аренда</a>
+            <a href="contact.html">Контакты</a>
+        </div>
+        <button class="mobile-menu-btn" onclick="openMobileMenu()"><i class="fas fa-bars"></i></button>
+        <a href="index.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
+    </header>
+
+    <div class="menu-overlay" id="menuOverlay" onclick="closeMobileMenu()"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" onclick="closeMobileMenu()"><i class="fas fa-times"></i></button>
+        <div class="mobile-menu-links">
+            <a href="index.html">Главная</a>
+            <a href="car.html">Автомобили</a>
+            <a href="rent.html">Аренда</a>
+            <a href="contact.html">Контакты</a>
+        </div>
+    </div>
+
+    <section class="hero">
+        <h1>Наш <span>автопарк</span></h1>
+        <p>Выберите автомобиль для незабываемой поездки</p>
+    </section>
+
+    <div class="filter-bar">
+        <span class="filter-btn active" onclick="filterCars('all')">Все авто</span>
+        <span class="filter-btn" onclick="filterCars('rent')">Для аренды</span>
+        <span class="filter-btn" onclick="filterCars('sale')">На продажу</span>
+    </div>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Поиск по марке или модели...">
+    </div>
+
+    <div class="cars-grid" id="carsGrid"></div>
+
+    <footer class="footer">
+        <p>© 2024 Luxury Rent. Все права защищены. | Демо-версия портфолио</p>
+        <p>Создатель: bepolark1d</p>
+    </footer>
+
+    <div id="toast" class="toast"><i class="fas fa-info-circle"></i><span id="toastMessage"></span></div>
+
+    <script>
+        // Демо-данные автомобилей
+        const carsData = [
+            { id: 1, brand: "Ferrari", model: "SF90 Stradale", year: 2024, color: "Красный", price_day: 65000, price_sale: null, status: "available", image: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=600", type: "rent", description: "Гибридный гиперкар с мощностью 1000 л.с." },
+            { id: 2, brand: "Lamborghini", model: "Revuelto", year: 2024, color: "Желтый", price_day: 75000, price_sale: null, status: "available", image: "https://images.unsplash.com/photo-1621135802920-133df287f0b2?w=600", type: "rent", description: "Первый гибридный гиперкар Lamborghini" },
+            { id: 3, brand: "Porsche", model: "911 Turbo S", year: 2023, color: "Синий", price_day: 35000, price_sale: null, status: "rented", image: "https://images.unsplash.com/photo-1503376780352-7e6696f1b0c5?w=600", type: "rent", description: "Икона спортивных автомобилей" },
+            { id: 4, brand: "BMW", model: "M5 Competition", year: 2023, color: "Черный", price_day: 25000, price_sale: 12000000, status: "available", image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600", type: "both", description: "Бизнес-седан с характером спорткара" },
+            { id: 5, brand: "Mercedes", model: "AMG GT63 S", year: 2023, color: "Серебристый", price_day: 40000, price_sale: 15000000, status: "available", image: "https://images.unsplash.com/photo-1614200187524-dc4b892acf16?w=600", type: "both", description: "Роскошный четырёхдверный купе" },
+            { id: 6, brand: "Audi", model: "R8 V10", year: 2022, color: "Белый", price_day: 45000, price_sale: null, status: "available", image: "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=600", type: "rent", description: "Спортивный суперкар с двигателем V10" },
+            { id: 7, brand: "Rolls-Royce", model: "Ghost", year: 2023, color: "Черный", price_day: 85000, price_sale: 35000000, status: "available", image: "https://images.unsplash.com/photo-1631295868223-63228b40f9e9?w=600", type: "both", description: "Абсолютная роскошь и комфорт" },
+            { id: 8, brand: "Bentley", model: "Continental GT", year: 2023, color: "Зеленый", price_day: 55000, price_sale: 22000000, status: "available", image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=600", type: "both", description: "Гран-турер премиум-класса" }
+        ];
+
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        function filterCars(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderCars();
+        }
+
+        function searchCars() {
+            currentSearch = document.getElementById('searchInput').value.toLowerCase();
+            renderCars();
+        }
+
+        function renderCars() {
+            const grid = document.getElementById('carsGrid');
+            let filtered = carsData;
+
+            if (currentFilter === 'rent') {
+                filtered = filtered.filter(c => c.type === 'rent' || c.type === 'both');
+            } else if (currentFilter === 'sale') {
+                filtered = filtered.filter(c => c.type === 'sale' || c.type === 'both');
+            }
+
+            if (currentSearch) {
+                filtered = filtered.filter(c => 
+                    c.brand.toLowerCase().includes(currentSearch) || 
+                    c.model.toLowerCase().includes(currentSearch)
+                );
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="empty-state"><i class="fas fa-car" style="font-size: 48px; color: #e94560; opacity: 0.5;"></i><h3 style="margin-top: 20px;">Автомобили не найдены</h3><p style="color: #a0a0b0;">Попробуйте изменить параметры поиска</p></div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(car => `
+                <div class="car-card">
+                    <div class="car-image">
+                        <img src="${car.image}" alt="${car.brand} ${car.model}" loading="lazy">
+                        <div class="car-status status-available">${car.status === 'available' ? 'Свободен' : 'Арендован'}</div>
+                    </div>
+                    <div class="car-header">
+                        <h3 class="car-title">${car.brand} ${car.model}</h3>
+                        <div class="car-subtitle">
+                            <span><i class="fas fa-calendar"></i> ${car.year}</span>
+                            <span><i class="fas fa-palette"></i> ${car.color}</span>
+                        </div>
+                    </div>
+                    <div class="car-body">
+                        <div class="car-price">
+                            ${car.price_day ? `<div class="price-value">${car.price_day.toLocaleString()} ₽</div><div class="price-label">/ день</div>` : ''}
+                            ${car.price_sale ? `<div class="price-value" style="font-size: 20px; margin-top: 5px;">${car.price_sale.toLocaleString()} ₽</div><div class="price-label">продажа</div>` : ''}
+                        </div>
+                        <div class="car-actions">
+                            ${car.price_day ? `<button class="btn-rent" onclick="showDemoAlert()">Арендовать</button>` : ''}
+                            ${car.price_sale ? `<button class="btn-rent" onclick="showDemoAlert()">Купить</button>` : ''}
+                            <button class="btn-fav" onclick="showDemoAlert()"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.showDemoAlert = function() {
+            showToast('🚀 Демо-режим: Добавление в корзину');
+        }
+
+        function openMobileMenu() {
+            document.getElementById('mobileMenu').classList.add('active');
+            document.getElementById('menuOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.remove('active');
+            document.getElementById('menuOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('searchInput').addEventListener('input', searchCars);
+        renderCars();
+    </script>
+</body>
+</html>

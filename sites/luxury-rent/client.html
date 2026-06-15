@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Клиенты | Luxury Rent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e94560;
+            border-radius: 10px;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 30px;
+            background: rgba(10, 10, 10, 0.96);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(233, 69, 96, 0.2);
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #e94560);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+        .nav {
+            display: flex;
+            gap: 24px;
+        }
+        .nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .nav a:hover, .nav a.active {
+            color: #e94560;
+        }
+        .back-button {
+            background: rgba(233, 69, 96, 0.2);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #e94560;
+            transition: 0.3s;
+        }
+        .back-button:hover {
+            background: #e94560;
+            color: white;
+        }
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #e94560;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .nav { display: none; }
+            .mobile-menu-btn { display: block; }
+            .header { padding: 12px 20px; }
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 70%;
+            max-width: 280px;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 1001;
+            padding: 60px 24px 30px;
+            transition: right 0.3s;
+            border-left: 1px solid rgba(233, 69, 96, 0.3);
+        }
+        .mobile-menu.active { right: 0; }
+        .mobile-menu-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #e94560;
+            font-size: 28px;
+            cursor: pointer;
+        }
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .mobile-menu-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(233, 69, 96, 0.2);
+        }
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+        }
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .hero {
+            padding: 120px 20px 60px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+        .hero h1 span {
+            color: #e94560;
+        }
+        .hero p {
+            font-size: 18px;
+            color: #a0a0b0;
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 32px; }
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+        .stat-card {
+            background: rgba(22, 33, 62, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(233, 69, 96, 0.2);
+            border-radius: 20px;
+            padding: 25px 35px;
+            text-align: center;
+            min-width: 160px;
+        }
+        .stat-number {
+            font-size: 36px;
+            font-weight: 800;
+            color: #e94560;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #a0a0b0;
+            margin-top: 5px;
+        }
+
+        .search-box {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        .search-box input {
+            padding: 12px 20px;
+            width: 320px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            outline: none;
+        }
+        .search-box input:focus {
+            border-color: #e94560;
+        }
+
+        .clients-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        .client-card {
+            background: linear-gradient(135deg, rgba(22, 33, 62, 0.7), rgba(22, 33, 62, 0.4));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(233, 69, 96, 0.15);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        .client-card:hover {
+            transform: translateY(-6px);
+            border-color: #e94560;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.4);
+        }
+        .client-header {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            padding: 24px;
+            position: relative;
+            border-bottom: 1px solid rgba(233, 69, 96, 0.2);
+        }
+        .client-id {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: rgba(233, 69, 96, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #e94560;
+        }
+        .client-avatar {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #e94560, #c7354f);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .client-name {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .client-email {
+            font-size: 13px;
+            color: #a0a0b0;
+        }
+        .client-body {
+            padding: 20px;
+        }
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #c0c0d0;
+        }
+        .info-row i {
+            width: 20px;
+            color: #e94560;
+        }
+        .client-stats {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 14px;
+            padding: 12px;
+            margin: 16px 0;
+        }
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #e94560;
+        }
+        .stat-label-sm {
+            font-size: 10px;
+            color: #a0a0b0;
+        }
+        .client-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .action-btn {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .action-edit {
+            background: rgba(233, 69, 96, 0.15);
+            color: #e94560;
+            border: 1px solid rgba(233, 69, 96, 0.3);
+        }
+        .action-edit:hover {
+            background: #e94560;
+            color: #fff;
+        }
+        .action-delete {
+            background: rgba(220, 53, 69, 0.15);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+        .action-delete:hover {
+            background: #dc3545;
+            color: #fff;
+        }
+        .btn-add {
+            display: inline-block;
+            background: linear-gradient(135deg, #e94560, #c7354f);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 30px;
+            transition: 0.3s;
+        }
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4);
+        }
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: rgba(22, 33, 62, 0.4);
+            border-radius: 32px;
+        }
+        .footer {
+            background: #111;
+            padding: 40px 20px 25px;
+            margin-top: 40px;
+            text-align: center;
+        }
+        .footer p {
+            color: #a0a0b0;
+            font-size: 13px;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(233, 69, 96, 0.95);
+            padding: 12px 20px;
+            border-radius: 50px;
+            color: white;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1100;
+            transform: translateX(400px);
+            transition: transform 0.4s;
+        }
+        .toast.show {
+            transform: translateX(0);
+        }
+        @media (max-width: 768px) {
+            .clients-grid { grid-template-columns: 1fr; }
+            .stats-row { gap: 15px; }
+            .stat-card { padding: 15px 20px; min-width: auto; }
+            .stat-number { font-size: 28px; }
+            .search-box input { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo" onclick="window.location.href='index.html'">LUXURY RENT</div>
+        <div class="nav">
+            <a href="index.html">Главная</a>
+            <a href="car.html">Автомобили</a>
+            <a href="rent.html">Аренда</a>
+            <a href="client.html" class="active">Клиенты</a>
+            <a href="contact.html">Контакты</a>
+        </div>
+        <button class="mobile-menu-btn" onclick="openMobileMenu()"><i class="fas fa-bars"></i></button>
+        <a href="index.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
+    </header>
+
+    <div class="menu-overlay" id="menuOverlay" onclick="closeMobileMenu()"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" onclick="closeMobileMenu()"><i class="fas fa-times"></i></button>
+        <div class="mobile-menu-links">
+            <a href="index.html">Главная</a>
+            <a href="car.html">Автомобили</a>
+            <a href="rent.html">Аренда</a>
+            <a href="client.html">Клиенты</a>
+            <a href="contact.html">Контакты</a>
+        </div>
+    </div>
+
+    <section class="hero">
+        <h1>Наши <span>клиенты</span></h1>
+        <p>Люди, которые доверяют нам свои поездки</p>
+    </section>
+
+    <div style="text-align: center;">
+        <a href="#" class="btn-add" onclick="showDemoAlert()"><i class="fas fa-plus"></i> Добавить клиента</a>
+    </div>
+
+    <div class="stats-row">
+        <div class="stat-card"><div class="stat-number">48</div><div class="stat-label">Всего клиентов</div></div>
+        <div class="stat-card"><div class="stat-number">12</div><div class="stat-label">Новых за 30 дней</div></div>
+        <div class="stat-card"><div class="stat-number">32</div><div class="stat-label">Активных</div></div>
+        <div class="stat-card"><div class="stat-number">6</div><div class="stat-label">VIP клиентов</div></div>
+    </div>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Поиск по имени, фамилии или телефону...">
+    </div>
+
+    <div class="clients-grid" id="clientsGrid"></div>
+
+    <footer class="footer">
+        <p>© 2024 Luxury Rent. Все права защищены. | Демо-версия портфолио</p>
+        <p>Создатель: bepolark1d</p>
+    </footer>
+
+    <div id="toast" class="toast"><i class="fas fa-info-circle"></i><span id="toastMessage"></span></div>
+
+    <script>
+        const clientsData = [
+            { id: 1, name: "Алексей", surname: "Смирнов", email: "alexey@mail.ru", phone: "+7 (995) 161-14-86", registrations: "2024-01-15", rentals: 5, total: 890000, vip: true, avatar: "АС" },
+            { id: 2, name: "Екатерина", surname: "Морозова", email: "katya@mail.ru", phone: "+7 (916) 234-56-78", registrations: "2024-02-01", rentals: 3, total: 450000, vip: false, avatar: "ЕМ" },
+            { id: 3, name: "Михаил", surname: "Волков", email: "misha@mail.ru", phone: "+7 (909) 876-54-32", registrations: "2023-11-20", rentals: 8, total: 1250000, vip: true, avatar: "МВ" },
+            { id: 4, name: "Денис", surname: "Козлов", email: "denis@mail.ru", phone: "+7 (925) 345-67-89", registrations: "2024-01-05", rentals: 2, total: 250000, vip: false, avatar: "ДК" },
+            { id: 5, name: "Ольга", surname: "Соколова", email: "olga@mail.ru", phone: "+7 (903) 123-45-67", registrations: "2023-12-10", rentals: 6, total: 780000, vip: true, avatar: "ОС" },
+            { id: 6, name: "Игорь", surname: "Мороз", email: "igor@mail.ru", phone: "+7 (915) 678-90-12", registrations: "2024-02-20", rentals: 1, total: 120000, vip: false, avatar: "ИМ" },
+            { id: 7, name: "Анна", surname: "Павлова", email: "anna@mail.ru", phone: "+7 (926) 111-22-33", registrations: "2024-01-28", rentals: 4, total: 560000, vip: false, avatar: "АП" },
+            { id: 8, name: "Сергей", surname: "Никитин", email: "sergey@mail.ru", phone: "+7 (911) 444-55-66", registrations: "2023-10-15", rentals: 10, total: 2100000, vip: true, avatar: "СН" }
+        ];
+
+        let currentSearch = '';
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        window.showDemoAlert = function() {
+            showToast('🚀 Демо-режим: Полная версия будет доступна в продакшене');
+        }
+
+        function formatDate(dateStr) {
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('ru-RU');
+        }
+
+        function searchClients() {
+            currentSearch = document.getElementById('searchInput').value.toLowerCase();
+            renderClients();
+        }
+
+        function renderClients() {
+            const grid = document.getElementById('clientsGrid');
+            let filtered = clientsData;
+
+            if (currentSearch) {
+                filtered = filtered.filter(c => 
+                    c.name.toLowerCase().includes(currentSearch) || 
+                    c.surname.toLowerCase().includes(currentSearch) ||
+                    c.phone.includes(currentSearch) ||
+                    (c.name + ' ' + c.surname).toLowerCase().includes(currentSearch)
+                );
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="empty-state"><i class="fas fa-users" style="font-size: 48px; color: #e94560; opacity: 0.5;"></i><h3 style="margin-top: 20px;">Клиенты не найдены</h3><p style="color: #a0a0b0;">Попробуйте изменить параметры поиска</p></div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(client => `
+                <div class="client-card">
+                    <div class="client-header">
+                        <span class="client-id">ID: ${client.id}</span>
+                        <div class="client-avatar">${client.avatar}</div>
+                        <h3 class="client-name">${client.name} ${client.surname}</h3>
+                        <div class="client-email"><i class="fas fa-envelope"></i> ${client.email}</div>
+                    </div>
+                    <div class="client-body">
+                        <div class="info-row"><i class="fas fa-phone-alt"></i> ${client.phone}</div>
+                        <div class="info-row"><i class="fas fa-calendar-alt"></i> Регистрация: ${formatDate(client.registrations)}</div>
+                        <div class="client-stats">
+                            <div class="stat-item"><div class="stat-value">${client.rentals}</div><div class="stat-label-sm">аренд</div></div>
+                            <div class="stat-item"><div class="stat-value">${client.total.toLocaleString()} ₽</div><div class="stat-label-sm">потрачено</div></div>
+                            <div class="stat-item"><div class="stat-value">${client.vip ? 'VIP' : 'Обычный'}</div><div class="stat-label-sm">статус</div></div>
+                        </div>
+                        <div class="client-actions">
+                            <a href="#" class="action-btn action-edit" onclick="showDemoAlert()"><i class="fas fa-edit"></i> Редактировать</a>
+                            <a href="#" class="action-btn action-delete" onclick="showDemoAlert()"><i class="fas fa-trash-alt"></i> Удалить</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openMobileMenu() {
+            document.getElementById('mobileMenu').classList.add('active');
+            document.getElementById('menuOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.remove('active');
+            document.getElementById('menuOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('searchInput').addEventListener('input', searchClients);
+        renderClients();
+    </script>
+</body>
+</html>
