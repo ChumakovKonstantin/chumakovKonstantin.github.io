@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>bepolark1d | Портфолио веб-разработчика</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #0D1117;
+            color: #E8EDF2;
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+        
+        :root {
+            --color-primary: #0D1117;
+            --color-primary-light: #161B22;
+            --color-secondary: #1F1B24;
+            --color-secondary-light: #2D2436;
+            --color-accent: #E11D48;
+            --color-accent-light: #FB7185;
+            --color-accent-dark: #BE123C;
+            --gradient-accent: linear-gradient(135deg, #E11D48 0%, #BE123C 100%);
+            --gradient-card: linear-gradient(135deg, rgba(31, 27, 36, 0.95) 0%, rgba(45, 36, 54, 0.95) 100%);
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
+            --shadow-accent: 0 0 20px rgba(225, 29, 72, 0.3);
+            
+            --space-4: 4px;
+            --space-8: 8px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-20: 20px;
+            --space-24: 24px;
+            --space-32: 32px;
+            --space-40: 40px;
+            --space-48: 48px;
+            --space-56: 56px;
+            --space-64: 64px;
+            --space-72: 72px;
+            --space-80: 80px;
+            
+            --text-xs: 12px;
+            --text-sm: 16px;
+            --text-base: 20px;
+            --text-lg: 24px;
+            --text-xl: 32px;
+            --text-2xl: 40px;
+            --text-3xl: 48px;
+        }
+        
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: auto;
+        }
+        
+        .content {
+            position: relative;
+            z-index: 10;
+            pointer-events: auto;
+        }
+        
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: var(--space-20) var(--space-32);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 20;
+            background: rgba(13, 17, 23, 0.6);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(225, 29, 72, 0.2);
+        }
+        
+        .logo {
+            font-size: var(--text-xl);
+            font-weight: 700;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: var(--space-32);
+        }
+        
+        .nav-links a {
+            color: #E8EDF2;
+            text-decoration: none;
+            font-size: var(--text-base);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .nav-links a:hover {
+            color: var(--color-accent);
+        }
+        
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: var(--space-80) var(--space-24);
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            padding: var(--space-8) var(--space-20);
+            background: rgba(225, 29, 72, 0.15);
+            border: 1px solid rgba(225, 29, 72, 0.3);
+            border-radius: 40px;
+            font-size: var(--text-sm);
+            color: var(--color-accent-light);
+            margin-bottom: var(--space-24);
+        }
+        
+        .hero h1 {
+            font-size: var(--text-3xl);
+            font-weight: 800;
+            margin-bottom: var(--space-24);
+            line-height: 1.2;
+        }
+        
+        .hero h1 .highlight {
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            font-size: var(--text-lg);
+            color: #A0AAB5;
+            margin-bottom: var(--space-40);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-12);
+            padding: var(--space-16) var(--space-32);
+            background: var(--gradient-accent);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: var(--text-base);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-accent);
+        }
+        
+        .projects {
+            padding: var(--space-80) var(--space-24);
+            background: transparent;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-64);
+        }
+        
+        .section-header h2 {
+            font-size: var(--text-2xl);
+            font-weight: 700;
+            margin-bottom: var(--space-16);
+        }
+        
+        .section-header p {
+            font-size: var(--text-lg);
+            color: #A0AAB5;
+        }
+        
+        .section-header .accent-line {
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-accent);
+            margin: var(--space-20) auto 0;
+            border-radius: 4px;
+        }
+        
+        /* ===== Карточки с превью (выезжают при скролле) ===== */
+        .projects-grid {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-48);
+        }
+        
+        .project-card {
+            display: flex;
+            flex-wrap: wrap;
+            background: var(--gradient-card);
+            border-radius: 28px;
+            overflow: hidden;
+            border: 1px solid rgba(225, 29, 72, 0.2);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(60px);
+            backdrop-filter: blur(10px);
+        }
+        
+        .project-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .project-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(225, 29, 72, 0.5);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        /* Превью сайта (заглушка) */
+        .project-preview {
+            flex: 1.2;
+            min-width: 280px;
+            height: 280px;
+            background: linear-gradient(135deg, #1F1B24 0%, #2D2436 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .preview-placeholder {
+            text-align: center;
+            padding: var(--space-24);
+        }
+        
+        .preview-icon {
+            font-size: 72px;
+            margin-bottom: var(--space-16);
+            opacity: 0.7;
+        }
+        
+        .preview-text {
+            font-size: var(--text-base);
+            color: var(--color-accent-light);
+            opacity: 0.8;
+        }
+        
+        /* Анимированная полоска в превью */
+        .preview-scan {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+            animation: scan 2s ease-in-out infinite;
+        }
+        
+        @keyframes scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* Контент карточки */
+        .project-info {
+            flex: 1;
+            padding: var(--space-32);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .project-title {
+            font-size: var(--text-xl);
+            font-weight: 700;
+            margin-bottom: var(--space-12);
+            color: white;
+        }
+        
+        .project-description {
+            font-size: var(--text-base);
+            color: #A0AAB5;
+            margin-bottom: var(--space-20);
+            line-height: 1.5;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-8);
+            margin-bottom: var(--space-24);
+        }
+        
+        .tech-badge {
+            padding: var(--space-4) var(--space-12);
+            background: rgba(225, 29, 72, 0.12);
+            border-radius: 20px;
+            font-size: var(--text-xs);
+            color: var(--color-accent-light);
+            font-weight: 500;
+        }
+        
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-8);
+            background: var(--gradient-accent);
+            color: white;
+            text-decoration: none;
+            padding: var(--space-12) var(--space-24);
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: var(--text-sm);
+            transition: all 0.3s ease;
+            width: fit-content;
+        }
+        
+        .project-link:hover {
+            gap: var(--space-12);
+            transform: translateX(4px);
+            box-shadow: var(--shadow-accent);
+        }
+        
+        /* Чётные карточки — превью справа */
+        .project-card:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        @media (max-width: 768px) {
+            .project-card {
+                flex-direction: column !important;
+            }
+            
+            .project-preview {
+                min-height: 220px;
+                height: auto;
+            }
+            
+            .project-info {
+                padding: var(--space-24);
+            }
+            
+            .navbar {
+                padding: var(--space-16);
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+        }
+        
+        .footer {
+            padding: var(--space-56) var(--space-24);
+            background: var(--color-primary);
+            text-align: center;
+            border-top: 1px solid rgba(225, 29, 72, 0.15);
+            margin-top: var(--space-64);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-32);
+            margin-bottom: var(--space-32);
+        }
+        
+        .social-links a {
+            color: #A0AAB5;
+            font-size: 28px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .social-links a:hover {
+            color: var(--color-accent);
+            transform: translateY(-4px);
+        }
+        
+        .footer p {
+            color: #6B7280;
+            font-size: var(--text-sm);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="canvas-container"></div>
+
+    <div class="content">
+        <nav class="navbar">
+            <div class="logo">bepolark1d</div>
+            <div class="nav-links">
+                <a href="#home">Главная</a>
+                <a href="#projects">Проекты</a>
+                <a href="#contact">Контакты</a>
+            </div>
+        </nav>
+
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <span class="hero-badge">
+                    ⚡ 3D Interactive Portfolio
+                </span>
+                <h1>
+                    Создаю <span class="highlight">кибер-реальность</span><br>
+                    в веб-пространстве
+                </h1>
+                <p>
+                    Full-stack разработчик | 3D-анимации | Интерактивный UX
+                </p>
+                <a href="#projects" class="cta-button" id="scrollToProjects">
+                    Смотреть работы
+                    <span style="font-family: monospace;">↓</span>
+                </a>
+            </div>
+        </section>
+
+        <section id="projects" class="projects">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Мои проекты</h2>
+                    <p>Кликни по карточке — откроется сайт</p>
+                    <div class="accent-line"></div>
+                </div>
+
+                <div class="projects-grid" id="projectsGrid">
+                    
+                    <!-- Проект 1: CRM Больница -->
+                    <div class="project-card" data-url="sites/hospital-crm/index.html" data-delay="0">
+                        <div class="project-preview">
+                            <div class="preview-placeholder">
+                                <div class="preview-icon">🏥</div>
+                                <div class="preview-text">CRM Больница</div>
+                            </div>
+                            <div class="preview-scan"></div>
+                        </div>
+                        <div class="project-info">
+                            <h3 class="project-title">CRM система для Больницы</h3>
+                            <p class="project-description">Полноценная CRM для управления пациентами, записями к врачам и электронными картами. Полный цикл от регистрации до выписки.</p>
+                            <div class="tech-stack">
+                                <span class="tech-badge">PHP</span>
+                                <span class="tech-badge">MySQL</span>
+                                <span class="tech-badge">Bootstrap</span>
+                                <span class="tech-badge">Chart.js</span>
+                            </div>
+                            <a href="#" class="project-link" onclick="openProject(event, 'sites/hospital-crm/index.html')">
+                                Открыть сайт <span>→</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Проект 2: Благоустройство Админка -->
+                    <div class="project-card" data-url="sites/blagoustroystvo-admin/index.html" data-delay="1">
+                        <div class="project-preview">
+                            <div class="preview-placeholder">
+                                <div class="preview-icon">🏢</div>
+                                <div class="preview-text">CRM Благоустройство</div>
+                            </div>
+                            <div class="preview-scan"></div>
+                        </div>
+                        <div class="project-info">
+                            <h3 class="project-title">CRM "Благоустройство"</h3>
+                            <p class="project-description">Административная панель для компании по благоустройству территорий. Управление заказами, клиентами, ресурсами и персоналом.</p>
+                            <div class="tech-stack">
+                                <span class="tech-badge">PHP</span>
+                                <span class="tech-badge">MySQL</span>
+                                <span class="tech-badge">Bootstrap</span>
+                                <span class="tech-badge">FullCalendar</span>
+                            </div>
+                            <a href="#" class="project-link" onclick="openProject(event, 'sites/blagoustroystvo-admin/index.html')">
+                                Открыть сайт <span>→</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Проект 3: Благоустройство Лендинг -->
+                    <div class="project-card" data-url="sites/blagoustroystvo-landing/index.html" data-delay="2">
+                        <div class="project-preview">
+                            <div class="preview-placeholder">
+                                <div class="preview-icon">🌳</div>
+                                <div class="preview-text">Лендинг Благоустройство</div>
+                            </div>
+                            <div class="preview-scan"></div>
+                        </div>
+                        <div class="project-info">
+                            <h3 class="project-title">Лендинг "Благоустройство"</h3>
+                            <p class="project-description">Продающий лендинг с анимациями, формами захвата и адаптивным дизайном. Высокая конверсия и современный UI.</p>
+                            <div class="tech-stack">
+                                <span class="tech-badge">HTML5</span>
+                                <span class="tech-badge">CSS3</span>
+                                <span class="tech-badge">JavaScript</span>
+                                <span class="tech-badge">Bootstrap</span>
+                            </div>
+                            <a href="#" class="project-link" onclick="openProject(event, 'sites/blagoustroystvo-landing/index.html')">
+                                Открыть сайт <span>→</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Проект 4: ТехноТорг -->
+                    <div class="project-card" data-url="sites/technotorg/index.html" data-delay="3">
+                        <div class="project-preview">
+                            <div class="preview-placeholder">
+                                <div class="preview-icon">🛒</div>
+                                <div class="preview-text">ТехноТорг</div>
+                            </div>
+                            <div class="preview-scan"></div>
+                        </div>
+                        <div class="project-info">
+                            <h3 class="project-title">Сайт "ТехноТорг"</h3>
+                            <p class="project-description">Интернет-магазин с каталогом товаров, корзиной и интеграцией платежных систем. Полноценная E-commerce платформа.</p>
+                            <div class="tech-stack">
+                                <span class="tech-badge">PHP</span>
+                                <span class="tech-badge">MySQL</span>
+                                <span class="tech-badge">jQuery</span>
+                                <span class="tech-badge">AJAX</span>
+                            </div>
+                            <a href="#" class="project-link" onclick="openProject(event, 'sites/technotorg/index.html')">
+                                Открыть сайт <span>→</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Проект 5: Luxury Rent (Флагман) -->
+                    <div class="project-card" data-url="sites/luxury-rent/index.html" data-delay="4">
+                        <div class="project-preview">
+                            <div class="preview-placeholder">
+                                <div class="preview-icon">🚗✨</div>
+                                <div class="preview-text">Luxury Rent</div>
+                            </div>
+                            <div class="preview-scan"></div>
+                        </div>
+                        <div class="project-info">
+                            <h3 class="project-title">Luxury Rent ⭐</h3>
+                            <p class="project-description">⭐ Флагманский проект — платформа для продажи и аренды премиальных автомобилей. Полный бэкенд, личный кабинет, админ-панель.</p>
+                            <div class="tech-stack">
+                                <span class="tech-badge">Full-stack</span>
+                                <span class="tech-badge">PHP/MySQL</span>
+                                <span class="tech-badge">REST API</span>
+                                <span class="tech-badge">JWT Auth</span>
+                            </div>
+                            <a href="#" class="project-link" onclick="openProject(event, 'sites/luxury-rent/index.html')">
+                                Открыть сайт <span>→</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <footer id="contact" class="footer">
+            <div class="social-links">
+                <a href="#" onclick="showAlert(event)">🐙 GitHub</a>
+                <a href="#" onclick="showAlert(event)">📱 Telegram</a>
+                <a href="#" onclick="showAlert(event)">✉️ Email</a>
+                <a href="#" onclick="showAlert(event)">💼 LinkedIn</a>
+            </div>
+            <p>© 2026 bepolark1d | Кибер-портфолио с 3D-анимациями</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script>
+        // ===== Lenis плавный скролл =====
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smoothWheel: true,
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // ===== GSAP ScrollTrigger для карточек =====
+        gsap.registerPlugin(ScrollTrigger);
+        
+        const cards = document.querySelectorAll('.project-card');
+        cards.forEach((card, index) => {
+            gsap.fromTo(card, 
+                { opacity: 0, y: 80 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.9,
+                    delay: index * 0.15,
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 85%',
+                        end: 'bottom 60%',
+                        toggleActions: 'play none none reverse',
+                    }
+                }
+            );
+        });
+
+        // Кнопка скролла к проектам
+        document.getElementById('scrollToProjects')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            const projectsSection = document.getElementById('projects');
+            if (projectsSection) lenis.scrollTo(projectsSection, { offset: 0 });
+        });
+
+        // Навигация
+        document.querySelectorAll('.nav-links a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const target = document.querySelector(targetId);
+                if (target) lenis.scrollTo(target, { offset: 0 });
+            });
+        });
+
+        // Открытие проекта
+        window.openProject = function(event, url) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (url && url !== '#') {
+                window.open(url, '_blank');
+            } else {
+                alert('🚀 Скоро здесь будет ссылка на сайт!');
+            }
+        }
+
+        // Клик по карточке (кроме кнопки)
+        document.querySelectorAll('.project-card').forEach(card => {
+            const link = card.querySelector('.project-link');
+            const cardUrl = card.getAttribute('data-url');
+            
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('.project-link')) return;
+                if (cardUrl && cardUrl !== '#') {
+                    window.open(cardUrl, '_blank');
+                } else {
+                    alert('🚀 Скоро здесь будет ссылка на сайт!');
+                }
+            });
+        });
+
+        window.showAlert = function(event) {
+            event.preventDefault();
+            alert('📱 Свяжитесь со мной для получения контактов!');
+        }
+
+        // ===== 3D СЦЕНА (Киберсетка + узел + партиклы) =====
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = null;
+        scene.fog = new THREE.FogExp2(0x0D1117, 0.008);
+        
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 5, 25);
+        camera.lookAt(0, 0, 0);
+        
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x000000, 0);
+        container.appendChild(renderer.domElement);
+        
+        // Кибер-сетка
+        const gridHelper = new THREE.GridHelper(60, 40, 0xE11D48, 0xE11D48);
+        gridHelper.position.y = -5;
+        gridHelper.material.transparent = true;
+        gridHelper.material.opacity = 0.25;
+        scene.add(gridHelper);
+        
+        const gridHelper2 = new THREE.GridHelper(40, 30, 0xFB7185, 0xE11D48);
+        gridHelper2.position.y = -4;
+        gridHelper2.material.transparent = true;
+        gridHelper2.material.opacity = 0.15;
+        scene.add(gridHelper2);
+        
+        // Вращающиеся кольца
+        const ringGeometry = new THREE.TorusGeometry(4, 0.08, 64, 200);
+        const ringMaterial = new THREE.MeshBasicMaterial({ color: 0xE11D48, transparent: true, opacity: 0.4 });
+        const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+        ring.rotation.x = Math.PI / 2;
+        ring.position.y = -3;
+        scene.add(ring);
+        
+        const ring2Geometry = new THREE.TorusGeometry(6, 0.05, 64, 200);
+        const ring2Material = new THREE.MeshBasicMaterial({ color: 0xFB7185, transparent: true, opacity: 0.3 });
+        const ring2 = new THREE.Mesh(ring2Geometry, ring2Material);
+        ring2.rotation.x = Math.PI / 2 + 0.3;
+        ring2.position.y = -3;
+        scene.add(ring2);
+        
+        // Вращающийся 3D-узел
+        const knotGeometry = new THREE.TorusKnotGeometry(1.8, 0.25, 200, 32, 3, 4);
+        const knotMaterial = new THREE.MeshStandardMaterial({
+            color: 0xE11D48,
+            emissive: 0xBE123C,
+            emissiveIntensity: 0.5,
+            metalness: 0.8,
+            roughness: 0.2,
+            transparent: true,
+            opacity: 0.9
+        });
+        const knot = new THREE.Mesh(knotGeometry, knotMaterial);
+        knot.position.set(0, 1.5, 0);
+        scene.add(knot);
+        
+        // Сферы вокруг узла
+        const sphereGroup = [];
+        for (let i = 0; i < 24; i++) {
+            const sphereGeo = new THREE.SphereGeometry(0.08, 8, 8);
+            const sphereMat = new THREE.MeshStandardMaterial({ color: 0xFB7185, emissive: 0xE11D48, emissiveIntensity: 0.3 });
+            const sphere = new THREE.Mesh(sphereGeo, sphereMat);
+            scene.add(sphere);
+            sphereGroup.push(sphere);
+        }
+        
+        // Партиклы
+        const particleCount = 800;
+        const particlePositions = new Float32Array(particleCount * 3);
+        const particleVelocities = [];
+        
+        for (let i = 0; i < particleCount; i++) {
+            particlePositions[i * 3] = (Math.random() - 0.5) * 50;
+            particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 30;
+            particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 30 - 10;
+            particleVelocities.push({
+                x: (Math.random() - 0.5) * 0.02,
+                y: (Math.random() - 0.5) * 0.02,
+                z: (Math.random() - 0.5) * 0.02
+            });
+        }
+        
+        const particleGeometry = new THREE.BufferGeometry();
+        particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+        const particleMaterial = new THREE.PointsMaterial({ color: 0xE11D48, size: 0.08, transparent: true, blending: THREE.AdditiveBlending });
+        const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+        scene.add(particleSystem);
+        
+        // Звёзды
+        const starCount = 400;
+        const starPositions = new Float32Array(starCount * 3);
+        for (let i = 0; i < starCount; i++) {
+            starPositions[i * 3] = (Math.random() - 0.5) * 120;
+            starPositions[i * 3 + 1] = (Math.random() - 0.5) * 60;
+            starPositions[i * 3 + 2] = (Math.random() - 0.5) * 60 - 30;
+        }
+        const starGeometry = new THREE.BufferGeometry();
+        starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+        const starMaterial = new THREE.PointsMaterial({ color: 0xFFFFFF, size: 0.05, transparent: true, opacity: 0.5 });
+        const starSystem = new THREE.Points(starGeometry, starMaterial);
+        scene.add(starSystem);
+        
+        // Освещение
+        const ambientLight = new THREE.AmbientLight(0x1F1B24);
+        scene.add(ambientLight);
+        const directionalLight = new THREE.DirectionalLight(0xE11D48, 1);
+        directionalLight.position.set(5, 10, 7);
+        scene.add(directionalLight);
+        
+        // Mouse tracking
+        let mouseX = 0, mouseY = 0;
+        let targetRotationX = 0, targetRotationY = 0;
+        
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseY = (event.clientY / window.innerHeight) * 2 - 1;
+            targetRotationY = mouseX * 0.5;
+            targetRotationX = mouseY * 0.3;
+        });
+        
+        let mouseInfluenceX = 0, mouseInfluenceY = 0;
+        
+        function updateParticles() {
+            const positions = particleGeometry.attributes.position.array;
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3] += mouseInfluenceX * 0.01;
+                positions[i * 3 + 1] += mouseInfluenceY * 0.01;
+                positions[i * 3] += particleVelocities[i].x;
+                positions[i * 3 + 1] += particleVelocities[i].y;
+                positions[i * 3 + 2] += particleVelocities[i].z;
+                
+                if (Math.abs(positions[i * 3]) > 25) positions[i * 3] *= -0.95;
+                if (Math.abs(positions[i * 3 + 1]) > 20) positions[i * 3 + 1] *= -0.95;
+                if (Math.abs(positions[i * 3 + 2]) > 20) positions[i * 3 + 2] *= -0.95;
+            }
+            particleGeometry.attributes.position.needsUpdate = true;
+            
+            mouseInfluenceX = mouseX * 0.5;
+            mouseInfluenceY = mouseY * 0.3;
+        }
+        
+        let time = 0;
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.008;
+            
+            knot.rotation.x += 0.008;
+            knot.rotation.y += 0.012;
+            knot.rotation.z += 0.005;
+            
+            sphereGroup.forEach((sphere, idx) => {
+                const angle = (idx / sphereGroup.length) * Math.PI * 2 + time;
+                const radius = 2.8;
+                sphere.position.x = Math.cos(angle) * radius;
+                sphere.position.z = Math.sin(angle) * radius;
+                sphere.position.y = 1.5 + Math.sin(angle * 2) * 0.3;
+            });
+            
+            ring.rotation.z += 0.003;
+            ring2.rotation.z -= 0.002;
+            ring2.rotation.y += 0.001;
+            
+            camera.position.x += (targetRotationY * 0.5 - camera.position.x) * 0.05;
+            camera.position.y += (-targetRotationX * 0.3 - camera.position.y) * 0.05;
+            camera.lookAt(0, 1, 0);
+            
+            starSystem.rotation.y += 0.0005;
+            starSystem.rotation.x += 0.0003;
+            
+            updateParticles();
+            
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+        
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        let scrollPercent = 0;
+        window.addEventListener('scroll', () => {
+            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            scrollPercent = window.scrollY / maxScroll;
+            knotMaterial.emissiveIntensity = 0.3 + scrollPercent * 0.6;
+            directionalLight.intensity = 0.8 + scrollPercent * 0.5;
+        });
+    </script>
+</body>
+</html>
